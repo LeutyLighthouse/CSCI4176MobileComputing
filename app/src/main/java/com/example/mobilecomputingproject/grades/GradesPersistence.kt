@@ -1,20 +1,24 @@
-package com.example.mobilecomputingproject.chat
+package com.example.mobilecomputingproject.grades
 
 import com.example.mobilecomputingproject.MainActivity
+import com.example.mobilecomputingproject.chat.ChatMessage
 import com.example.mobilecomputingproject.helpers.Utls
 import com.example.mobilecomputingproject.interfaces.ICallback
+import com.example.mobilecomputingproject.users.UserPersistence
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.getValue
 import org.json.JSONArray
 import org.json.JSONObject
 
-class ChatPersistence {
+class GradesPersistence {
 
     companion object
     {
-        var curr_ref = MainActivity.fb_db_ref!!.child("Chats")
+        var curr_ref = MainActivity.fb_db_ref!!.child("Users")
+            .child(Utls.sanitize_str_for_db(MainActivity.fb_user!!.email!!)).child("Grading Schemes")
         private lateinit var state_listener: ValueEventListener
 
         fun initChats(email: String, friends: MutableList<String>, cb: ICallback)
@@ -87,46 +91,51 @@ class ChatPersistence {
             })
         }
 
-
-
-        fun turn_on_chat_listener(chat_idx: String, cb: ICallback)
+        fun delete_scheme(uid: String)
         {
-            var chat_idx_san:String = Utls.sanitize_str_for_db(chat_idx)
+            curr_ref.child(uid).removeValue()
+        }
+
+
+
+        fun turn_on_schemes_listener(cb: ICallback)
+        {
 
             state_listener = object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if (dataSnapshot.exists()) {
                         cb.callback(dataSnapshot)
                     }
-
                 }
-
                 override fun onCancelled(databaseError: DatabaseError) {
                 }
             }
-
-            curr_ref.child(chat_idx_san).addValueEventListener(state_listener)
+            curr_ref.addValueEventListener(state_listener)
         }
 
-        fun turn_off_chat_listener(chat_idx: String, cb: ICallback)
+        fun turn_off_schemes_listener(cb: ICallback)
         {
-            var chat_idx_san:String = Utls.sanitize_str_for_db(chat_idx)
-            curr_ref.child(chat_idx_san).removeEventListener(state_listener)
+            curr_ref.removeEventListener(state_listener)
             cb.callback(null)
         }
 
-        fun set_chat_json(chat_idx: String, json: JSONObject, cb: ICallback)
+        fun getNewSchemeKey(): String?
         {
-            var chat_idx_san: String = Utls.sanitize_str_for_db(chat_idx)
+            val new_idx = UserPersistence.curr_ref.push().key
+            return new_idx
+        }
 
-            curr_ref.child(chat_idx_san).setValue(json.toString())
+        fun set_scheme_json(uid_idx: String, json: JSONObject, cb: ICallback)
+        {
+            curr_ref.child(uid_idx).setValue(json.toString())
             cb.callback(null)
         }
 
         fun update_ref()
         {
-            curr_ref = MainActivity.fb_db_ref!!.child("Chats")
+            curr_ref = MainActivity.fb_db_ref!!.child("Users")
+                .child(Utls.sanitize_str_for_db(MainActivity.fb_user!!.email!!))
+                .child("Grading Schemes")
         }
     }
-
 }

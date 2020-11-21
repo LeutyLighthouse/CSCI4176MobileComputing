@@ -9,7 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".chat.ChatActivity"></activity>
+        <activity android:name=".chat.ChatGradingSchemeSelector"></activity>
+        <activity android:name=".grades.GradeCalcActivity" />
+        <activity android:name=".grades.GradeCalculatorSelector" />
+        <activity android:name=".chat.ChatActivity" />
         <activity android:name=".chat.ChatSelectorActivity" />
         <activity android:name=".users.FriendManagerActivity" />
         <activity android:name=".MainActivity">

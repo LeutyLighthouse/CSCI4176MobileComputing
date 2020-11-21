@@ -11,18 +11,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="153dp"
-        android:layout_marginTop="71dp"
+        android:layout_marginTop="16dp"
         android:text="Friend Requests:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
         android:id="@+id/fr_spinner"
-        android:layout_width="376dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="21dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fr_title" />
@@ -32,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="69dp"
-        android:layout_marginTop="34dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="92dp"
         android:text="Accept"
         app:layout_constraintEnd_toStartOf="@+id/fr_reject_button"
@@ -44,7 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="92dp"
-        android:layout_marginTop="34dp"
+        android:layout_marginTop="8dp"
         android:text="Reject"
         app:layout_constraintStart_toEndOf="@+id/fr_accept_button"
         app:layout_constraintTop_toBottomOf="@+id/fr_spinner" />
@@ -54,7 +54,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="139dp"
-        android:layout_marginTop="46dp"
+        android:layout_marginTop="56dp"
         android:text="Send Friend Request:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fr_accept_button" />
@@ -64,7 +64,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="71dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="4dp"
         android:ems="10"
         android:hint="Friend's email"
@@ -77,39 +77,40 @@
         android:id="@+id/fr_send_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="89dp"
+        android:layout_marginStart="4dp"
         android:text="Send"
         app:layout_constraintStart_toEndOf="@+id/fr_send_edittext"
-        app:layout_constraintTop_toBottomOf="@+id/fr_reject_button" />
-
-    <Spinner
-        android:id="@+id/fr_remove_spinner"
-        android:layout_width="376dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintBottom_toBottomOf="@+id/fr_send_edittext" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="157dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="48dp"
         android:text="Remove Friend:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fr_send_edittext" />
+
+    <Spinner
+        android:id="@+id/fr_remove_spinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+
 
     <Button
         android:id="@+id/fr_remove_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="162dp"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="8dp"
         android:text="Remove"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fr_remove_spinner" />

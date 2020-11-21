@@ -1,6 +1,8 @@
 package com.example.mobilecomputingproject.chat
 
-class ChatMessage(contents: String, sender: String, time: Long) : Comparable<ChatMessage> {
+import org.json.JSONObject
+
+class ChatMessage(contents: String, sender: String, time: Long, special: Int) : Comparable<ChatMessage> {
     companion object
     {
         const val IDX = "idx"
@@ -8,11 +10,18 @@ class ChatMessage(contents: String, sender: String, time: Long) : Comparable<Cha
         const val SENDER = "sender"
         const val TIME = "time"
         const val CHAT = "chat"
+
+        const val SCHEDULE = "schedule"
+        const val GRADES = "grades"
+        const val SPECIAL = "spec"
     }
 
     var contents = contents
     var sender = sender
     var time = time
+    var grades: JSONObject? = JSONObject()
+    var schedule: JSONObject? = JSONObject()
+    var special: Int = special
 
 
     override fun compareTo(msg: ChatMessage): Int

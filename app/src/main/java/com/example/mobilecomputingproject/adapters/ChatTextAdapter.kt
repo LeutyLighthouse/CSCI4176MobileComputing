@@ -11,12 +11,13 @@ import com.example.mobilecomputingproject.MainActivity
 import com.example.mobilecomputingproject.R
 import com.example.mobilecomputingproject.helpers.Utls
 
-class ChatTextAdapter(context: Context, chat_data: MutableList<ChatMessage>) : RecyclerView.Adapter<ChatTextAdapter.ViewHolder>(){
+class ChatTextAdapter(context: Context, chat_data: MutableList<ChatMessage>, listener: ChatTextAdapter.ItemClickListener) : RecyclerView.Adapter<ChatTextAdapter.ViewHolder>(){
     private val RECEIVED = 1
     private val SENT = 2
 
     var message_list = chat_data
     private var inflater: LayoutInflater = LayoutInflater.from(context)
+    private var clickListener: ChatTextAdapter.ItemClickListener = listener
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var msg_text: TextView = itemView.findViewById<TextView>(R.id.chat_contents)
@@ -58,7 +59,16 @@ class ChatTextAdapter(context: Context, chat_data: MutableList<ChatMessage>) : R
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         var curr_msg: ChatMessage = message_list[position]
         holder.bind_message_obj_to_view(curr_msg)
+
+        holder.msg_text.setOnClickListener {
+            clickListener.onItemClick(position)
+        }
     }
 
     override fun getItemCount(): Int { return message_list.size }
+
+    interface ItemClickListener
+    {
+        fun onItemClick(position: Int)
+    }
 }

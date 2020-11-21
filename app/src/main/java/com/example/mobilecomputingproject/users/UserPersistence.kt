@@ -12,7 +12,7 @@ class UserPersistence {
 
     companion object
     {
-        val curr_ref = MainActivity.fb_db_ref!!.child("Users")
+        var curr_ref = MainActivity.fb_db_ref!!.child("Users")
 
         fun getFriends()
         {
@@ -306,6 +306,11 @@ class UserPersistence {
                 override fun onCancelled(databaseError: DatabaseError) {
                 }
             })
+        }
+
+        fun update_ref()
+        {
+            curr_ref = MainActivity.fb_db_ref!!.child("Users")
         }
 
     }

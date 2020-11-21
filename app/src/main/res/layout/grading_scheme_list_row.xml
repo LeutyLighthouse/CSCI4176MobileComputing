@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/grades_row_constraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <EditText
+        android:id="@+id/g_entry_title"
+        android:layout_width="127dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="44dp"
+        android:layout_marginStart="20dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:paddingEnd="10dp"
+        android:text="42"
+        android:hint="Criteria Name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+
+
+    <EditText
+        android:id="@+id/g_entry_worth"
+        android:layout_width="70dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        android:paddingEnd="10dp"
+        android:text="42"
+        app:layout_constraintStart_toEndOf="@+id/g_entry_title"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/g_worth_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:text="Worth"
+        app:layout_constraintTop_toBottomOf="@+id/g_entry_worth"
+        app:layout_constraintStart_toStartOf="@+id/g_entry_worth"
+        tools:layout_editor_absoluteX="25dp" />
+
+    <EditText
+        android:id="@+id/g_entry_have"
+        android:layout_width="75dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        android:paddingEnd="10dp"
+        android:text="42"
+        app:layout_constraintStart_toEndOf="@+id/g_entry_worth"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/g_have_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:text="Have"
+        app:layout_constraintTop_toBottomOf="@+id/g_entry_have"
+        app:layout_constraintStart_toStartOf="@+id/g_entry_have"
+        tools:layout_editor_absoluteX="308dp" />
+
+
+
+    <Button
+        android:id="@+id/g_delete_button"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="20dp"
+        android:layout_weight="1"
+        android:backgroundTint="#FF3535"
+        android:gravity="center"
+        android:text="X"
+        android:textColor="#ECECEC"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

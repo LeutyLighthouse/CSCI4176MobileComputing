@@ -1,15 +1,21 @@
 package com.example.mobilecomputingproject.chat
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobilecomputingproject.MainActivity
 import com.example.mobilecomputingproject.R
 import com.example.mobilecomputingproject.adapters.ChatTextAdapter
+import com.example.mobilecomputingproject.adapters.GradeCalcAdapter
+import com.example.mobilecomputingproject.grades.GradeCalcActivity
+import com.example.mobilecomputingproject.grades.GradesPersistence
+import com.example.mobilecomputingproject.grades.GradingScheme
 import com.example.mobilecomputingproject.helpers.Utls
 import com.example.mobilecomputingproject.interfaces.ICallback
 import com.google.firebase.database.DataSnapshot
@@ -17,7 +23,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.util.*
 
-class ChatActivity : AppCompatActivity() {
+class ChatActivity : AppCompatActivity(), ChatTextAdapter.ItemClickListener {
 
     companion object
     {
@@ -34,7 +40,7 @@ class ChatActivity : AppCompatActivity() {
         var rv = findViewById<RecyclerView>(R.id.chat_recycler)
         var layoutManager = LinearLayoutManager(this)
         rv.layoutManager = layoutManager
-        var adapter = ChatTextAdapter(this, messages)
+        var adapter = ChatTextAdapter(this, messages, this)
         rv.adapter = adapter
 
 
@@ -43,20 +49,28 @@ class ChatActivity : AppCompatActivity() {
                 var data_str: String = data?.value.toString()
 
                 var json_obj: JSONObject = JSONObject(data_str)
+                curr_chat = json_obj
                 var json_list: JSONArray = json_obj.getJSONArray(ChatMessage.CHAT)
 
                 messages.clear()
                 for (i in 0 until json_list.length())
                 {
                     var curr_obj: JSONObject = json_list.getJSONObject(i)
-                    messages.add(
-                        ChatMessage(curr_obj.getString(ChatMessage.MESSAGE),
-                            curr_obj.getString(ChatMessage.SENDER),
-                            curr_obj.getString(ChatMessage.TIME).toLong())
-                    )
+                    var curr_msg = ChatMessage(curr_obj.getString(ChatMessage.MESSAGE),
+                                            curr_obj.getString(ChatMessage.SENDER),
+                                            curr_obj.getString(ChatMessage.TIME).toLong(),
+                                            curr_obj.getString(ChatMessage.SPECIAL).toInt())
+                    if (curr_msg.special == 1)
+                    {
+                        curr_msg.grades = curr_obj.getJSONObject(ChatMessage.GRADES)
+                    }
+
+                    messages.add(curr_msg)
                 }
                 messages.sort()
                 adapter.notifyDataSetChanged()
+
+
 
                 rv.scrollToPosition(messages.size - 1)
             }
@@ -76,6 +90,7 @@ class ChatActivity : AppCompatActivity() {
         send_bttn.setOnClickListener {
             var in_text:String = input_field.text.toString()
 
+            // prevent empty messages from being sent
             if (in_text.equals(""))
             {
                 return@setOnClickListener
@@ -83,14 +98,16 @@ class ChatActivity : AppCompatActivity() {
             var san_email: String = Utls.sanitize_str_for_db(MainActivity.user!!.email!!)
 
             var curr_time: Long = Calendar.getInstance().timeInMillis
+            var special = 0
 
             var curr_obj = JSONObject()
             curr_obj.put(ChatMessage.MESSAGE, in_text)
             curr_obj.put(ChatMessage.SENDER, san_email)
             curr_obj.put(ChatMessage.TIME, curr_time)
+            curr_obj.put(ChatMessage.SPECIAL, special.toString())
             input_field.text.clear()
 
-            var curr_msg: ChatMessage = ChatMessage(in_text, san_email, curr_time)
+            var curr_msg: ChatMessage = ChatMessage(in_text, san_email, curr_time, special)
             messages.add(curr_msg)
             messages.sort()
 
@@ -100,7 +117,6 @@ class ChatActivity : AppCompatActivity() {
             ChatPersistence.set_chat_json(curr_chat.getString(ChatMessage.IDX), curr_chat, object :
                 ICallback {
                 override fun callback(data: DataSnapshot?) {
-                    println("MESSAGE SENT")
                     rv.scrollToPosition(messages.size - 1)
                 }
             })
@@ -111,7 +127,8 @@ class ChatActivity : AppCompatActivity() {
         }
 
         grades_bttn.setOnClickListener {
-            // todo
+            val intent = Intent(applicationContext, ChatGradingSchemeSelector::class.java)
+            startActivity(intent)
         }
 
 
@@ -123,7 +140,6 @@ class ChatActivity : AppCompatActivity() {
 
 
     override fun onBackPressed() {
-        println("BACK PRESSED")
         ChatPersistence.turn_off_chat_listener(curr_chat.get(ChatMessage.IDX).toString(), object :
             ICallback {
             override fun callback(data: DataSnapshot?) {
@@ -133,14 +149,22 @@ class ChatActivity : AppCompatActivity() {
         super.onBackPressed()
     }
 
-    override fun onStop() {
-        println("CHAT STOPPED")
-        ChatPersistence.turn_off_chat_listener(curr_chat.get(ChatMessage.IDX).toString(), object :
-            ICallback {
-            override fun callback(data: DataSnapshot?) {
-                println("LISTENER DETACHED")
+    override fun onItemClick(position: Int) {
+        // If this message contains a grading scheme then receive it into our grading schemes
+        if (messages[position].special == 1)
+        {
+
+            var json = JSONObject(messages[position].grades.toString())
+            val new_key = GradesPersistence.getNewSchemeKey()
+            if (new_key != null) {
+                json.put(GradingScheme.UID, new_key)
+                GradesPersistence.set_scheme_json(new_key, json, object : ICallback {
+                    override fun callback(data: DataSnapshot?) {
+                        Toast.makeText(applicationContext, "Received Grading Scheme!", Toast.LENGTH_SHORT).show()
+                    }
+                })
             }
-        })
-        super.onStop()
+        }
     }
+
 }

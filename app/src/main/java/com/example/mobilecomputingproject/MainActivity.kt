@@ -11,8 +11,11 @@ import android.content.Intent
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import com.example.mobilecomputingproject.adapters.GradeCalcSelectorAdapter
 import com.example.mobilecomputingproject.chat.ChatPersistence
 import com.example.mobilecomputingproject.chat.ChatSelectorActivity
+import com.example.mobilecomputingproject.grades.GradeCalculatorSelector
+import com.example.mobilecomputingproject.grades.GradesPersistence
 import com.example.mobilecomputingproject.helpers.Utls
 import com.example.mobilecomputingproject.interfaces.ICallback
 import com.example.mobilecomputingproject.interfaces.IOnRetrieveData
@@ -51,6 +54,7 @@ class MainActivity : AppCompatActivity() {
     {
         override fun onStart() {}
         override fun onSuccess(data: DataSnapshot?) {
+
         }
         override fun onFailed(dbError: DatabaseError?) {}
 
@@ -155,8 +159,13 @@ class MainActivity : AppCompatActivity() {
                 user?.getInitData(fb_user?.email!!, listener)
             }
             addLoginInfoToDB()
+            UserPersistence.update_ref()
+            ChatPersistence.update_ref()
+            GradesPersistence.update_ref()
             Toast.makeText(applicationContext,"Signed in!", Toast.LENGTH_SHORT).show()
         }
+
+
 
         val title = findViewById<TextView>(R.id.main_title).also {
             if(fb_user != null)
@@ -217,7 +226,12 @@ class MainActivity : AppCompatActivity() {
 
                 }
             })
+        }
 
+        val grades_bttn = findViewById<Button>(R.id.grades_button)
+        grades_bttn.setOnClickListener {
+            val intent = Intent(applicationContext, GradeCalculatorSelector::class.java)
+            startActivity(intent)
         }
 
 
